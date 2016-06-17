@@ -3,29 +3,50 @@ import random
 import string
 import sys
 
+def error(code):
+    errors = {0:'Error in application, check to ensure axl is up-to-date and configured properly',
+              1:'Error in path specification, check permissions and ensure path is not empty',
+              2:'Error in seed specification, ensure seed is not empty and does not contain slashes'}
+
+    sys.exit('ERROR ' + str(code) + ': ' + errors[code])
+
 def generate(**keyword_parameters):
     path = ''
-    if ('path' in keyword_parameters):
-        path = keyword_parameters['path']
-        print 'Path parameter found, ', keyword_parameters['path']
+    if 'path' in keyword_parameters:
+        path = keyword_parameters['path'].strip()
+        print 'Path parameter found, ', path
     else:
-        path = sys.argv[1]
+        try:
+            path = sys.argv[1]
+        except:
+            error(1)
 
-    if path is None or path.strip() == '' or path[len(path)-1] != '/':
-        sys.exit('Error in path specification... Ensure path is not empty and ends with /')
+    if path is None or path.strip() == '':
+        error(1)
 
+    if path[len(path)-1] != '/':
+        path += '/'
     path += 'webext/'
+
+    print 'Generating keys...'
+    if 'seed' in keyword_parameters:
+        seed = keyword_parameters['seed'].strip()
+        if seed is None or seed == '' or '/' in seed:
+            error(2)
+        else:
+            ext_key = seed
+            print 'Seed found, ', ext_key
+    else:
+        ext_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+        print 'Seed generated, ' + ext_key
+
+    ext_name = 'axl' + ext_key
+    print 'Name generated, ' + ext_name
+    ext_id = 'axl' + ext_key + '@mozilla.org'
+    print 'ID generated, ' + ext_id
 
     if not os.path.exists(path):
         os.makedirs(path)
-
-    print 'Generating keys...'
-    ext_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
-    print ext_key
-    ext_name = 'axl' + ext_key
-    print ext_name
-    ext_id = 'axl' + ext_key + '@mozilla.org'
-    print ext_id
 
     print 'Creating manifest...'
     manifest = open(path + 'manifest.json', 'w')
@@ -56,7 +77,7 @@ def generate(**keyword_parameters):
 
     print 'Success! Web extension at ' + path + ext_name + '.xpi'
 
-    return ext_name + '.xpi'
+    return path + ext_name + '.xpi'
 
 if __name__ == '__main__':
     generate()
