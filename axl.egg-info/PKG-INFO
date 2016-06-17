@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: axl
+Version: 0.1
+Summary: Python package that generates web extensions for Firefox
+Home-page: http://github.com/justinpotts/axl
+Author: Justin Potts
+Author-email: justin@garblemasher.com
+License: MPL
+Description: UNKNOWN
+Platform: UNKNOWN
