@@ -1,9 +1,0 @@
-setup.py
-axl/__init__.py
-axl/axl.py
-axl.egg-info/PKG-INFO
-axl.egg-info/SOURCES.txt
-axl.egg-info/dependency_links.txt
-axl.egg-info/entry_points.txt
-axl.egg-info/not-zip-safe
-axl.egg-info/top_level.txt
