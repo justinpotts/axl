@@ -11,5 +11,5 @@ setup(name='axl',
       zip_safe=False,
       entry_points="""
         [console_scripts]
-        axl = axl:generate
+        axl = axl.axl:cli
     """)

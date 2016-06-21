@@ -20,31 +20,23 @@ def cli():
                       default=os.getcwd(),
                       metavar='str',
                       help='path of desired directory to export web extension package')
-    '''
     parser.add_option('--seed',
                       action='store',
                       dest='seed',
-                      default='test',
+                      default=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
                       metavar='str',
                       help='custom name for web extension (default: axl followed by a random six-character alphanumeric code)')
-    '''
     options, args = parser.parse_args()
 
-    if not args:
-        parser.print_usage()
-        parser.exit()
+    print 'Options,', parser.parse_args()
 
-    generate(opt_path=options.path, opt_seed=options.path)
+    generate(opt_path=options.path, opt_seed=options.seed)
 
 def generate(opt_path=None, opt_seed=None):
     path = opt_path
-    seed = str(opt_seed)
+    seed = opt_seed
 
-    if opt_path is None:
-        path = os.getcwd()
-        print 'Path generated,', path
-    else:
-        print 'Path found,', path
+    print 'Path,', path
 
     if path[len(path)-1] != '/':
         path += '/'
@@ -53,15 +45,11 @@ def generate(opt_path=None, opt_seed=None):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    if seed is None:
-        seed = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
-        print 'Seed generated,', seed
-    else:
-        print 'Seed found,', seed
+    print 'Seed,', seed
 
-    ext_name = 'axl' + seed
+    ext_name = 'axl' + str(seed)
     print 'Name generated, ' + ext_name
-    ext_id = 'axl' + seed + '@mozilla.org'
+    ext_id = 'axl' + str(seed) + '@mozilla.org'
     print 'ID generated, ' + ext_id
 
     print 'Creating manifest...'
@@ -78,14 +66,22 @@ def generate(opt_path=None, opt_seed=None):
     genextjs.close()
     print 'JS created'
 
-    os.chdir(path)
+    package(path, ext_name)
+    cleanup(path, ext_name)
+
+def package(path, ext_name):
     print 'Packaging extension...'
+    os.chdir(path)
+    print os.getcwd()
+    print 'Name: ' + ext_name
     os.system('zip -r ../' + ext_name + '.xpi *')
     print 'Extension packaged in .xpi at ' + path + ext_name + '.xpi'
     os.chdir('../')
     print 'Cleaning up...'
+    return True
 
-    os.chdir('webext/')
+def cleanup(path, ext_name):
+    os.chdir(path)
     os.system('rm manifest.json')
     os.system('rm genext.js')
     os.chdir('..')
@@ -94,7 +90,6 @@ def generate(opt_path=None, opt_seed=None):
     xpi_path = path[:len(path)-7]
 
     print 'Success! Web extension at ' + xpi_path + ext_name + '.xpi'
-
     return xpi_path + ext_name + '.xpi'
 
 if __name__ == '__main__':

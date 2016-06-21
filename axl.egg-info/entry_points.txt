@@ -1,4 +1,4 @@
 
         [console_scripts]
-        axl = axl:generate
+        axl = axl.axl:cli
     
