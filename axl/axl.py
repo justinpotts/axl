@@ -17,13 +17,11 @@ def cli():
     parser.add_option('--path',
                       action='store',
                       dest='path',
-                      default=os.getcwd(),
                       metavar='str',
                       help='path of desired directory to export web extension package')
     parser.add_option('--seed',
                       action='store',
                       dest='seed',
-                      default=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
                       metavar='str',
                       help='custom name for web extension (default: axl followed by a random six-character alphanumeric code)')
     options, args = parser.parse_args()
@@ -36,6 +34,9 @@ def generate(opt_path=None, opt_seed=None):
     path = opt_path
     seed = opt_seed
 
+    if path is None:
+        path = os.getcwd()
+
     print 'Path,', path
 
     if path[len(path)-1] != '/':
@@ -44,6 +45,9 @@ def generate(opt_path=None, opt_seed=None):
 
     if not os.path.exists(path):
         os.makedirs(path)
+
+    if seed is None:
+        seed = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
     print 'Seed,', seed
 
