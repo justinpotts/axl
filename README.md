@@ -5,21 +5,18 @@ Python package that generates web extensions for Firefox
 `pip install axl`
 
 ## How to Use
-Command line: `axl <path>`
+Command line: `axl option <option-value>`
 
 Import:
 ```
-import axl
-axl.generate(<options>)
+from axl import generate
+generate(option='<option-value>')
 ```
+Note: Not all arguments are required. The extension will be generated with default values if left empty.
 
-The .xpi file will be exported to the specified path, starting with `axl` followed by a mixture of 6 random numbers and characters, such as `axlOA2H5D`.
+The .xpi file will be exported to the specified path, starting with `axl` followed by a custom seed, or the default: mixture of 6 random numbers and characters, such as `axlOA2H5D`.
 
 The path is returned after successful completion.
 
 ### Options
-
-Axl includes multiple options to customize your web extensions.
-```
-path='/path/to/desired/export/location/': Allows you to specify the location to export packaged extension.
-seed='customSeed':
+To see all available options, type `axl --help`.
