@@ -70,8 +70,15 @@ def generate(opt_path=None, opt_seed=None):
     genextjs.close()
     print 'JS created'
 
-    package(path, ext_name)
-    cleanup(path, ext_name)
+    package_successful = package(path, ext_name)
+    if not package_successful:
+        error(0)
+
+    cleanup_successful,xpi_path = cleanup(path, ext_name)
+    if cleanup_successful:
+        print 'Success! Extension .xpi generated at:', xpi_path
+    else:
+        error(0)
 
 def package(path, ext_name):
     print 'Packaging extension...'
@@ -93,8 +100,8 @@ def cleanup(path, ext_name):
 
     xpi_path = path[:len(path)-7]
 
-    print 'Success! Web extension at ' + xpi_path + ext_name + '.xpi'
-    return xpi_path + ext_name + '.xpi'
+    return (True, xpi_path + ext_name + '.xpi')
+
 
 if __name__ == '__main__':
     cli()
