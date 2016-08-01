@@ -80,6 +80,8 @@ def generate(opt_path=None, opt_seed=None):
     else:
         error(0)
 
+    return xpi_path
+
 def package(path, ext_name):
     print 'Packaging extension...'
     os.chdir(path)
