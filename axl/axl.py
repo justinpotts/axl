@@ -85,11 +85,13 @@ def generate(opt_path=None, opt_seed=None):
 def generate_screenshot():
     from scipy.misc import imread,imsave
     import numpy as np
-    
+
     img = np.zeros([100,100,3],dtype=np.uint8)
     img.fill(255) # or img[:] = 255
 
     imsave("screenshot.jpg",img)
+
+    return 'screenshot.jpg'
 
 def package(path, ext_name):
     print 'Packaging extension...'
